@@ -1,0 +1,36 @@
+# Python & uv
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# ROS 2 build artifacts
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Model weights, TensorRT engines, large datasets & outputs
+*.onnx
+*.engine
+*.trt
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+.cache/
+artifacts/
+outputs/
+videos/
+*.mp4
+*.gif
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
