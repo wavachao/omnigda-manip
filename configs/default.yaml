@@ -1,0 +1,54 @@
+project:
+  name: omnigda-manip
+  seed: 42
+  device: cuda
+
+sim:
+  env_id: "OmniGDAClutter-v1"
+  num_objects: 6
+  heldout_objects: 2
+  image_width: 640
+  image_height: 480
+  control_mode: "pd_joint_pos"
+  render_mode: "rgb_array"
+
+perception_2d:
+  backbone: "vit_small_patch14_dinov2.lvd142m"
+  input_size: 518
+  feature_layers: [8, 10, 11]
+  backend: "pytorch"   # pytorch | onnx | tensorrt
+  fp16: true
+  shrinkage_method: "oas"  # ledoit_wolf | oas | ridge
+  ridge_alpha: 0.05
+  num_foreground_components: 2
+  confidence_threshold: 0.55
+  spatial_refine: true
+
+perception_3d:
+  clip_model: "ViT-B-32"
+  clip_pretrained: "laion2b_s34b_b79k"
+  point_num_samples: 512
+  depth_min_m: 0.15
+  depth_max_m: 2.0
+  confidence_denoise_thresh: 0.45
+  sor_nb_neighbors: 20
+  sor_std_ratio: 1.5
+  num_gmm_components: 2
+  shrinkage_alpha: 0.08
+  ood_mahalanobis_threshold: 45.0
+  fusion_temperature: 1.0
+  min_cluster_points: 40
+
+grasp:
+  gripper_max_width_m: 0.08
+  gripper_min_width_m: 0.012
+  finger_depth_m: 0.045
+  num_candidates: 64
+  friction_coeff: 0.5
+  table_z_margin_m: 0.008
+  min_grasp_score: 0.35
+
+agent:
+  entropy_nbv_threshold: 0.85
+  max_views: 3
+  confidence_accept_threshold: 0.60

@@ -1,0 +1,35 @@
+services:
+  omnigda:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: omnigda-manip:jazzy
+    container_name: omnigda-dev
+    network_mode: host
+    ipc: host
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY:-}
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - HF_HOME=/cache/huggingface
+      - TORCH_HOME=/cache/torch
+      - MS_ASSET_DIR=/cache/maniskill
+      - HTTP_PROXY=${HTTP_PROXY:-http://127.0.0.1:7897}
+      - HTTPS_PROXY=${HTTPS_PROXY:-http://127.0.0.1:7897}
+      - NO_PROXY=localhost,127.0.0.1
+    volumes:
+      - ${HOME}/code:${HOME}/code
+      - ${HOME}/.cache/omnigda:/cache
+      - /usr/share/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd.json:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    working_dir: ${HOME}/code/omnigda-manip
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
