@@ -15,6 +15,7 @@ exec docker run --rm \
   -e NVIDIA_VISIBLE_DEVICES=all \
   -e NVIDIA_DRIVER_CAPABILITIES=all \
   -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
+  -e PYTHONPATH="/opt/omnigda-venv/lib/python3.12/site-packages:${PWD}/src" \
   -e HF_HOME=/cache/huggingface \
   -e TORCH_HOME=/cache/torch \
   -e MS_ASSET_DIR=/cache/maniskill \

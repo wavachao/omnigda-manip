@@ -51,7 +51,7 @@ RUN uv sync --extra dev --no-install-project
 
 # Ensure ROS 2 and TensorRT libraries are always discoverable
 RUN echo 'source /opt/ros/jazzy/setup.bash' >> /etc/bash.bashrc
-RUN printf '#!/usr/bin/env bash\nset -e\nsource /opt/ros/jazzy/setup.bash\nif [ -f "${PWD}/ros2_ws/install/setup.bash" ]; then\n  source "${PWD}/ros2_ws/install/setup.bash"\nfi\nexport PYTHONPATH="${PWD}/src:${PYTHONPATH:-}"\nexec "$@"\n' > /usr/local/bin/omnigda-entrypoint.sh \
+RUN printf '#!/usr/bin/env bash\nset -e\nsource /opt/ros/jazzy/setup.bash\nif [ -f "${PWD}/ros2_ws/install/setup.bash" ]; then\n  source "${PWD}/ros2_ws/install/setup.bash"\nfi\nexport PYTHONPATH="/opt/omnigda-venv/lib/python3.12/site-packages:${PWD}/src:${PYTHONPATH:-}"\nexec "$@"\n' > /usr/local/bin/omnigda-entrypoint.sh \
     && chmod +x /usr/local/bin/omnigda-entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/omnigda-entrypoint.sh"]
