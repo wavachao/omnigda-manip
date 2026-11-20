@@ -12,6 +12,8 @@ exec docker run --rm \
   --gpus all \
   --network host \
   --ipc host \
+  -e DISPLAY="${DISPLAY:-}" \
+  -e QT_X11_NO_MITSHM=1 \
   -e NVIDIA_VISIBLE_DEVICES=all \
   -e NVIDIA_DRIVER_CAPABILITIES=all \
   -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
@@ -24,6 +26,7 @@ exec docker run --rm \
   -e NO_PROXY="localhost,127.0.0.1" \
   -v "${HOME}/code:${HOME}/code" \
   -v "${CACHE_DIR}:/cache" \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
   -v /usr/share/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd.json:ro \
   -w "${PWD}" \
   omnigda-manip:jazzy \
