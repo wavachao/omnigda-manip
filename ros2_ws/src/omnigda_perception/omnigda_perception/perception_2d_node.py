@@ -79,7 +79,12 @@ class Perception2DNode(Node):
 
     def _ensure_seg2d(self) -> SegmentGDAPlus:
         if self._seg2d is None:
-            self._seg2d = SegmentGDAPlus.from_config(self._cfg)
+            extractor = None
+            if self._backend in {"tensorrt", "onnx"}:
+                from omnigda.deploy import create_dinov2_extractor
+
+                extractor = create_dinov2_extractor(self._cfg, backend=self._backend)
+            self._seg2d = SegmentGDAPlus.from_config(self._cfg, extractor=extractor)
         return self._seg2d
 
     def _try_load_memory(self, path: Path) -> bool:

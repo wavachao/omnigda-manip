@@ -86,15 +86,20 @@ class Perception3DNode(Node):
         self._min_cluster_points = int(p3d_cfg.get("min_cluster_points", 20))
 
         self._lock = threading.RLock()
-        self._gmda3d: PartialAwareMultimodalGMDA = (
-            gmda3d
-            if gmda3d is not None
-            else PartialAwareMultimodalGMDA(
+        if gmda3d is not None:
+            self._gmda3d = gmda3d
+        else:
+            clip_enc = None
+            if self._enable_clip and self._backend in {"tensorrt", "onnx"}:
+                from omnigda.deploy import create_clip_encoder
+
+                clip_enc = create_clip_encoder(self._cfg, backend=self._backend)
+            self._gmda3d = PartialAwareMultimodalGMDA(
                 config=self._cfg,
                 enable_clip=self._enable_clip,
                 device=self._device,
+                clip_encoder=clip_enc,
             )
-        )
         self._sg_builder = (
             scene_graph_builder if scene_graph_builder is not None else SceneGraphBuilder3D()
         )

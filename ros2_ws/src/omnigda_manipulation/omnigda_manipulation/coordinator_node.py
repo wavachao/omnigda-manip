@@ -200,14 +200,22 @@ class CoordinatorNode(Node):
         )
 
     def _try_attach_t7_grounder(self) -> None:
-        """Auto-attach T7 SpatialGrounder3D if omnigda.agent is available in the workspace."""
+        """Auto-attach T7 SpatialGrounder3D + RuleBasedMultimodalParser from omnigda.agent."""
         try:
-            from omnigda.agent.grounder import SpatialGrounder3D  # type: ignore[import-not-found]
+            from omnigda.agent import RuleBasedMultimodalParser, SpatialGrounder3D
 
-            self._grounder = SpatialGrounder3D()
-            self.get_logger().info("Auto-attached omnigda.agent.grounder.SpatialGrounder3D")
-        except Exception:
+            self._t7_parser = RuleBasedMultimodalParser()
+            self._grounder = SpatialGrounder3D(
+                clip_encoder=None,
+                scene_graph_builder=self._sg_builder,
+                entropy_nbv_threshold=self._entropy_nbv_threshold,
+                confidence_accept_threshold=self._confidence_accept_threshold,
+            )
+            self.get_logger().info("Auto-attached omnigda.agent.SpatialGrounder3D")
+        except Exception as exc:
+            self._t7_parser = None
             self._grounder = None
+            self.get_logger().debug(f"T7 SpatialGrounder3D unavailable: {exc}")
 
     def set_grounder(self, grounder: Any) -> None:
         """Attach a custom 3D spatial grounder (e.g., T7 SpatialGrounder3D)."""
@@ -246,11 +254,19 @@ class CoordinatorNode(Node):
             grounder = self._grounder
 
         if grounder is not None and hasattr(grounder, "ground"):
-            res = grounder.ground(instruction, scene_graph)
+            t7_parser = getattr(self, "_t7_parser", None)
+            query_arg = (
+                t7_parser.parse(instruction)
+                if t7_parser is not None and isinstance(instruction, str)
+                else instruction
+            )
+            res = grounder.ground(query_arg, scene_graph)
             if isinstance(res, Object3DDetection):
                 return res, self._needs_nbv(res), f"Grounded via {type(grounder).__name__}"
-            if hasattr(res, "target"):
-                target = res.target
+            if hasattr(res, "target_object") or hasattr(res, "target"):
+                target = getattr(res, "target_object", None)
+                if target is None and hasattr(res, "target"):
+                    target = res.target
                 needs_nbv = bool(
                     getattr(res, "needs_nbv", self._needs_nbv(target) if target else True)
                 )

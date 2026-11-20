@@ -118,10 +118,26 @@ class OmniGDAAgent:
         cfg3d = cfg.get("perception_3d", {})
 
         self.config = cfg
-        self.segmenter = segmenter if segmenter is not None else SegmentGDAPlus.from_config(cfg)
-        self.classifier_3d = (
-            classifier_3d if classifier_3d is not None else PartialAwareMultimodalGMDA(config=cfg)
-        )
+        backend = str(cfg.get("perception_2d", {}).get("backend", "pytorch")).lower()
+        if segmenter is not None:
+            self.segmenter = segmenter
+        elif backend in {"tensorrt", "onnx"}:
+            from omnigda.deploy import create_dinov2_extractor
+
+            extractor = create_dinov2_extractor(cfg, backend=backend)
+            self.segmenter = SegmentGDAPlus.from_config(cfg, extractor=extractor)
+        else:
+            self.segmenter = SegmentGDAPlus.from_config(cfg)
+
+        if classifier_3d is not None:
+            self.classifier_3d = classifier_3d
+        elif backend in {"tensorrt", "onnx"}:
+            from omnigda.deploy import create_clip_encoder
+
+            clip_enc = create_clip_encoder(cfg, backend=backend)
+            self.classifier_3d = PartialAwareMultimodalGMDA(config=cfg, clip_encoder=clip_enc)
+        else:
+            self.classifier_3d = PartialAwareMultimodalGMDA(config=cfg)
         self.scene_graph_builder = (
             scene_graph_builder if scene_graph_builder is not None else SceneGraphBuilder3D()
         )
