@@ -351,7 +351,7 @@ def estimate_pointcloud_completeness(
     density = float(n_pts) / max(surface_area, 1e-5)
     density_score = float(1.0 - np.exp(-density / 15000.0))
 
-    # 3. 3D octant coverage (how many of the 8 octants around centroid are populated)
+    # 3. 3D octant coverage with per-octant support saturation (prevents sparse noise saturation)
     centroid = np.mean(pts, axis=0)
     rel = pts - centroid[None, :]
     octant_bits = (
@@ -359,7 +359,8 @@ def estimate_pointcloud_completeness(
         + (rel[:, 1] >= 0.0).astype(np.int32) * 2
         + (rel[:, 2] >= 0.0).astype(np.int32)
     )
-    octant_cov = float(np.unique(octant_bits).size) / 8.0
+    octant_counts = np.bincount(octant_bits, minlength=8).astype(np.float64)
+    octant_cov = float(np.mean(np.minimum(octant_counts / 8.0, 1.0)))
 
     # 4. Azimuthal angular coverage around vertical Z axis (8 sectors of 45 deg)
     r_xy = np.hypot(rel[:, 0], rel[:, 1])
@@ -368,7 +369,8 @@ def estimate_pointcloud_completeness(
         angles = np.arctan2(rel[radial_mask, 1], rel[radial_mask, 0])
         sectors = np.floor(((angles + np.pi) / (2.0 * np.pi)) * 8.0).astype(np.int32)
         sectors = np.clip(sectors, 0, 7)
-        azimuth_cov = float(np.unique(sectors).size) / 8.0
+        sector_counts = np.bincount(sectors, minlength=8).astype(np.float64)
+        azimuth_cov = float(np.mean(np.minimum(sector_counts / 8.0, 1.0)))
     else:
         azimuth_cov = 0.0
 
