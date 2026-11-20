@@ -154,7 +154,7 @@ class SimBridgeNode(Node):
         """Capture RGB-D from the active camera and publish images, camera_info, and TF2 frames."""
         with self._sim_lock:
             frame, _ = self._sim.capture_rgbd(camera_name=self._active_camera)
-            robot_base_mat = _sapien_pose_to_matrix(self._sim.robot_base_pose())
+            robot_base_mat = _sapien_pose_to_matrix(self._sim.robot_base_pose)
 
         stamp = self.get_clock().now().to_msg()
         rgb_msg, depth_msg, info_msg = rgbd_frame_to_ros_msgs(
