@@ -8,12 +8,18 @@ from omnigda.sim.clutter_env import (
     ObjectSpec,
     OmniGDAClutterEnv,
 )
+from omnigda.sim.controller import FrankaGraspController, build_top_down_grasp
+from omnigda.sim.templates import OmniGDATemplateStudioEnv, capture_few_shot_templates
 
 __all__ = [
     "ClutteredTabletopSim",
     "DEFAULT_BASE_OBJECTS",
+    "FrankaGraspController",
     "HELD_OUT_NOVEL_OBJECTS",
     "OBJECT_CATALOG",
     "ObjectSpec",
     "OmniGDAClutterEnv",
+    "OmniGDATemplateStudioEnv",
+    "build_top_down_grasp",
+    "capture_few_shot_templates",
 ]
