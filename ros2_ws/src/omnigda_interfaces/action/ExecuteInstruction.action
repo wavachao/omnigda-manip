@@ -1,0 +1,10 @@
+string instruction
+---
+bool success
+string message
+int32 target_instance_id
+string target_class_name
+int32 num_views_used
+---
+string stage
+float32 progress

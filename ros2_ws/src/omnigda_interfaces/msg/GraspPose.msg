@@ -1,0 +1,8 @@
+int32 target_instance_id
+string target_class_name
+geometry_msgs/Pose pose
+float32 width_m
+float32 score
+float32 force_closure_score
+float32 antipodal_score
+bool collision_free

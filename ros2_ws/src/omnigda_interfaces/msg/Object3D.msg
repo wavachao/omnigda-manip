@@ -1,0 +1,13 @@
+int32 instance_id
+string class_name
+float32 confidence
+float32 entropy
+float32 ood_score
+bool is_ood
+geometry_msgs/Point centroid
+geometry_msgs/Pose obb_pose
+geometry_msgs/Vector3 obb_extent
+int32[4] bbox_2d
+float32 weight_2d
+float32 weight_3d
+float32 weight_text

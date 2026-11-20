@@ -1,0 +1,7 @@
+std_msgs/Header header
+string backend
+float32 seg2d_latency_ms
+float32 gmda3d_latency_ms
+float32 total_latency_ms
+float32 gpu_mem_mb
+int32 num_registered_classes

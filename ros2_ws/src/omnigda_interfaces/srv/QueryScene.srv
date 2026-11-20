@@ -1,0 +1,8 @@
+string instruction
+---
+bool found
+int32 target_instance_id
+string target_class_name
+float32 confidence
+bool needs_nbv
+string reasoning

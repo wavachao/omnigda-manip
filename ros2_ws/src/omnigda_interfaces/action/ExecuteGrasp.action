@@ -1,0 +1,10 @@
+GraspPose grasp
+geometry_msgs/Point place_position
+bool do_place
+---
+bool success
+string message
+float32 execution_time_sec
+---
+string stage
+float32 progress
