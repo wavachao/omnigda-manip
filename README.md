@@ -15,9 +15,9 @@ Given just **2–3 RGB-D support templates** of a brand-new unseen object (such 
 
 ## Demo Video
 
-[![OmniGDA-Manip End-to-End Demo Video](docs/media/demo_video_poster.png)](https://github.com/wavachao/omnigda-manip/raw/main/docs/media/OmniGDA-Manip-Demo.mp4)
+https://github.com/user-attachments/assets/edd6b5fa-afe8-4b73-9c4c-8239aba2b2a9
 
-> **End-to-End ManiSkill 3 + RTX 3060 TensorRT FP16 Demo (1080p, 44s)** — Click the preview above to watch/download [`docs/media/OmniGDA-Manip-Demo.mp4`](docs/media/OmniGDA-Manip-Demo.mp4):
+> **End-to-End ManiSkill 3 + RTX 3060 TensorRT FP16 Demo (1080p, 44s)** ([direct file](docs/media/OmniGDA-Manip-Demo.mp4)):
 > 1. **2-Shot Online Novel Registration** (`cyan_t_tool`, `101 ms`, zero gradient updates)
 > 2. **English Pick Task** (`"pick up the cyan t tool"` — single-view localization & 15.8 cm lift)
 > 3. **Active Multi-View NBV** (`base_camera` + `nbv_camera` automatic dual-view fusion)
@@ -189,7 +189,7 @@ omnigda-manip/
 ├── docs/
 │   ├── BENCHMARK_REPORT.md       # Full quantitative evaluation & 5-part badcase analysis
 │   ├── RESUME_HIGHLIGHTS.md      # Chinese STAR resume descriptions & Top-10 technical interview Q&As
-│   ├── media/                    # Demo video (OmniGDA-Manip-Demo.mp4), poster, storyboard & ablation charts
+│   ├── media/                    # Demo video (OmniGDA-Manip-Demo.mp4), storyboard & ablation charts
 │   └── results/                  # Raw reproducible deploy_benchmark.json & ablation_results.json
 ├── ros2_ws/src/
 │   ├── omnigda_interfaces/       # 7 custom .msg, 3 .srv, 2 .action definitions
