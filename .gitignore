@@ -29,6 +29,7 @@ outputs/
 videos/
 *.mp4
 *.gif
+!docs/media/*.mp4
 
 # OS / IDE
 .DS_Store
